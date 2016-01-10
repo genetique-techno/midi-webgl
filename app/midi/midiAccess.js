@@ -1,30 +1,46 @@
-// Midi Web API test
+import when from 'when';
 
-/*export class MidiAccess {
+export default class MidiAccess {
 
   constructor() {
+    if (navigator.requestMIDIAccess) {
+      this.enabled = true;
+      navigator.requestMIDIAccess({
+        sysex: false
+      }).then((midiAccess) => {
+        console.log('MIDI Connections Queried');
+        let midi = midiAccess;
+
+        let inputs = midi.inputs.values();
+        this.controllers = [];
+        for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
+          this.controllers.push(input);
+        }
+        return this.controllers;
+      }, (e) => {      this.enable = false;
+      return console.log('No access to MIDI devices or your browser doesn\'t fully support WebMIDI API.');
+
+        this.enabled = false;
+        return console.log('No access to MIDI devices or your browser doesn\'t fully support WebMIDI API.');
+      });
+    } else {
+      console.log('Unable to find MIDI support for your browser.');
+      return null;
+    }
+  }
+
+  listMidiConnections() {
+    if (!this.enabled) { return console.log('MIDI not supported'); }
+
 
   }
 
-  controllers() {
-
+  getController(index) {
+    if (!this.enabled) { return console.log('MIDI not supported'); }
+    return this.controllers[index];
   }
-
-  getController(num) {
-
-  }
-}*/
-
-if (navigator.requestMIDIAccess) {
-  navigator.requestMIDIAccess({
-    sysex: false
-  }).then(onMIDISuccess, onMIDIFailure);
-} else {
-  console.log('Unable to find MIDI support for your browser.');
 }
-
-var body = document.getElementsByTagName('body')[0];
-
+/*
 function onMIDISuccess(midiAccess) {
   console.log('midiAccess', midiAccess);
   var midi = midiAccess;
@@ -70,4 +86,4 @@ function color(midiNote, velocity) {
 
 function frequencyFromNoteNumber(note) {
   return 440 * Math.pow(2, (note - 69) / 12);
-}
+}*/

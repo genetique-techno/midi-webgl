@@ -1,8 +1,10 @@
-import midiAccess from './midi/midiAccess';
+import MidiAccess from './midi/midiAccess';
 // import THREE from 'three';
 import './styles/app.less';
 
-console.log('all is well');
+let midi = new MidiAccess();
+midi.listMidiConnections();
+
 /*
 // resize the canvas
 window.addEventListener('resize', onWindowResize, false)
