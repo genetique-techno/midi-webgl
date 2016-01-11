@@ -1,13 +1,9 @@
 import MidiAccess from './midi/midiAccess';
-// import THREE from 'three';
+import onMidiMessage from './scenes/one/midi.js';
+import THREE from 'three';
 import './styles/app.less';
 
-let midi = new MidiAccess();
-midi.listMidiConnections();
-
-/*
-// resize the canvas
-window.addEventListener('resize', onWindowResize, false)
+let midi = new MidiAccess(onMidiMessage);
 
 // scene, camera, renderer
 var scene = new THREE.Scene();
@@ -18,13 +14,13 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // geometry
-var geometry = new THREE.BoxGeometry(1, 1, 1);
+var geometry = new THREE.BoxGeometry(50, 50, 50);
 var material = new THREE.MeshBasicMaterial({ color: '#ba3333' });
 var cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
 // grid
-var size = 500, step = 50;
+/*var size = 500, step = 50;
 var  geometry  = new THREE.Geometry();
 for (var i = -size; i <= size; i += step) {
   geometry.vertices.push(new THREE.Vector3(-size, 0, i));
@@ -34,11 +30,20 @@ for (var i = -size; i <= size; i += step) {
 }
 var material = new THREE.LineBasicMaterial({ color: '#aaa', opacity: 0.2 });
 var line = new THREE.LineSegments(geometry, material);
-scene.add(line);
+scene.add(line);*/
 
+// grid-help
+var size = 500, step = 50;
+var gridHelper = new THREE.GridHelper(size, step);
+scene.add(gridHelper);
 
-camera.position.z = 5;
-// camera.position.y = 20;
+camera.position.z = 300;
+camera.position.y = 300;
+camera.lookAt(new THREE.Vector3(0,0,0));
+
+function rotate(camera) {
+
+}
 
 // render loop
 function render() {
@@ -53,14 +58,3 @@ function render() {
 }
 
 render();
-
-function onWindowResize() {
-  camera.left = window.innerWidth / - 2;
-  camera.right = window.innerWidth / 2;
-  camera.top = window.innerHeight / 2;
-  camera.bottom = window.innerHeight / - 2;
-
-  camera.updateProjectionMatrix();
-
-  renderer.setSize( window.innerWidth, window.innerHeight );
-}*/
