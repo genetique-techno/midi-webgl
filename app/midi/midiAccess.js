@@ -1,7 +1,6 @@
 export default class MidiAccess {
 
-  constructor(onMidiMessage, controller) {
-    console.log(onMidiMessage);
+  constructor() {
     if (navigator.requestMIDIAccess) {
       this.enabled = true;
       this.controllers = [];
@@ -11,23 +10,10 @@ export default class MidiAccess {
       }).then(
         (midiAccess) => {
 
-          console.log('MIDI Connections Queried');
-          if (controller >= 0) {
-            console.log('Listening on MIDI Device ' + controller);
-          } else {
-            console.log('Listening on all MIDI Devices');
-          }
-
           let midi = midiAccess;
           let inputs = midi.inputs.values();
-          let i = 0;
           for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
-            console.log(i, controller)
-
-            input.value.onmidimessage = onMidiMessage;
-
-            console.log(input.value);
-            i += 1;
+            input.value.onmidimessage = this._onMidiMessage;
           }
         },
         (e) => {
@@ -38,5 +24,15 @@ export default class MidiAccess {
       console.log('Unable to find MIDI support for your browser.');
       return null;
     }
+  }
+
+  _onMidiMessage(message) {
+    let data = message.data;
+    let channel = data[0] & 0xf;
+    let type = data[0] & 0xf0;
+    let note = data[1];
+    let velocity = data[2];
+    let noteEvent = new CustomEvent('__note', { detail: { channel, type, note, velocity }});
+    window.dispatchEvent(noteEvent);
   }
 }

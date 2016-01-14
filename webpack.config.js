@@ -15,6 +15,9 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js'],
+    alias: {
+      app: __dirname+'/app'
+    }
   }
 };
